@@ -1,0 +1,71 @@
+{% extends 'todoList/main.html' %}
+{% block content %}
+
+  <!-- adiciona Sortable.js (para drag & drop, se quiser) -->
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+
+  <!-- Cabeçalho com título e botão de criar -->
+  <div class="header-bar">
+    <h1>My To Do List</h1>
+    <a id="add-link" href="{% url 'task-create' %}">+</a>
+  </div>
+
+  <!-- Barra de busca -->
+  <div id="search-add-wrapper">
+    <form method="get">
+      <input type="text" name="search-area" placeholder="Buscar tarefas…" value="{{ search_input }}">
+      <input type="submit" class="button" value="Search">
+    </form>
+  </div>
+
+  <!-- Formulário escondido para enviar nova ordem -->
+  <form id="reorderForm" method="post" action="{% url 'task-reorder' %}" style="display: none;">
+    {% csrf_token %}
+    <input type="hidden" id="positionInput" name="position">
+  </form>
+
+  <!-- Lista de tarefas -->
+  <div class="card-body" id="tasklist">
+    {% for task in tasks %}
+      <div class="task-wrapper {% if task.completed %}selectedTask{% endif %}" data-position="{{ task.id }}">
+        <div class="task-title">
+          {% if task.completed %}
+            <div class="task-complete-icon"></div>
+          {% else %}
+            <div class="task-incomplete-icon"></div>
+          {% endif %}
+          <a href="{% url 'task-update' task.id %}">{{ task.title }}</a>
+        </div>
+        <div class="task-controls">
+          <a class="delete-link" href="{% url 'task-delete' task.id %}">&times;</a>
+          <span class="handle">&nbsp;&#10247;</span>
+        </div>
+      </div>
+    {% empty %}
+      <div style="text-align: center; padding: 20px;">
+        <h3>Nenhuma tarefa disponível.</h3>
+        <a class="button" href="{% url 'task-create' %}">Criar nova tarefa</a>
+      </div>
+    {% endfor %}
+  </div>
+
+  <script>
+    const taskList = document.getElementById("tasklist");
+    const reorderForm = document.getElementById("reorderForm");
+    const positionInput = document.getElementById("positionInput");
+
+    Sortable.create(taskList, {
+      handle: '.handle',
+      ghostClass: 'dropArea',
+      chosenClass: 'selectedTask',
+      onEnd: () => {
+        const positions = Array.from(taskList.children)
+                               .map(el => el.dataset.position)
+                               .join(',');
+        positionInput.value = positions;
+        reorderForm.submit();
+      }
+    });
+  </script>
+
+{% endblock content %}
