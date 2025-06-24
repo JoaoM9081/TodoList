@@ -1,12 +1,10 @@
 {% extends 'todoList/main.html' %}
 {% block content %}
 
-  <!-- Cabeçalho com link de volta -->
   <div class="header-bar">
     <a href="{% url 'tasks' %}">&#8592; Voltar</a>
   </div>
 
-  <!-- Corpo do card com o formulário -->
   <div class="card-body">
     <h2>Editor de Tarefas</h2>
     <form method="post" action="">

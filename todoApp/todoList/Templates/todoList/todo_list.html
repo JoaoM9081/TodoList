@@ -1,12 +1,10 @@
 {% extends 'todoList/main.html' %}
 {% block content %}
 
-<!-- Cabeçalho com título e botão de criar -->
 <div class="header-bar">
   <h1>Minha Lista de Tarefas</h1>
 </div>
 
-<!-- Barra de busca -->
 <div id="search-add-wrapper">
   <form method="GET" style="display: flex;">
     <input type='text' name='search-area' placeholder="Pesquise por sua tarefa" value="{{search_input}}">
@@ -17,11 +15,9 @@
   {% endif %}
 </div>
 
-<!-- Lista de tarefas -->
 <div id="tasklist" class="task-items-wrapper">
 
   {% if tasks %}
-  {# Aqui entra o seu for normal #}
   {% for task in tasks %}
   <div class="task-wrapper" data-position="{{ task.pk }}">
   <div class="task-title">
@@ -43,10 +39,9 @@
   {% endfor %}
 
   {% else %}
-  {# Não veio nenhuma tarefa #}
   {% if search_input %}
   <div style="text-align: center; padding: 20px;">
-    <h3>Não foi encontrada nenhuma tarefa para “{{ search_input }}”</h3>
+    <h3>Não foi encontrada nenhuma tarefa para este filtro.</h3>
     <h4><a href="{% url 'tasks' %}">Voltar à lista completa</a></h4>
   </div>
   {% else %}

@@ -1,5 +1,4 @@
 :root {
-    /* Cores principais */
     --cor-fundo: #1B1F2A;
     --cor-container: #252A3A;
     --cor-texto-primario: #ECECF1;
@@ -27,7 +26,7 @@
 body {
     background-color: var(--cor-fundo);
     font-family: 'Nunito', sans-serif;
-    padding-top: 50px;
+    padding-top: 65px;
     color: var(--cor-texto-primario);
 }
 
@@ -111,6 +110,24 @@ input {
     color: #CF4949;
     font-size: 22px;
     line-height: 0;
+    transition: transform 0.1s ease;
+}
+
+.delete-link:hover {
+    transform: translateY(-2px);
+}
+
+.view-link {
+    text-decoration: none;
+    font-weight: 900;
+    font-size: 22px;
+    line-height: 0;
+    color: var(--cor-botao-texto);    
+    transition: transform 0.1s ease;
+}
+
+.view-link:hover {
+    transform: translateY(-2px);
 }
 
 .handle {
@@ -250,7 +267,6 @@ label {
     background-color: var(--cor-container);
 }
 
-/* Ajuste na largura e altura do textarea de descrição */
 .card-body textarea {
     width: 90%;
     min-height: 60px;
@@ -283,17 +299,4 @@ label {
 .task-controls {
     display: flex;
     align-items: center;
-}
-
-.view-link {
-    text-decoration: none;
-    font-weight: 900;
-    font-size: 22px;
-    line-height: 0;
-    color: var(--cor-botao-texto);    
-    transition: transform 0.1s ease;
-}
-
-.view-link:hover {
-    transform: translateY(-2px);
 }
