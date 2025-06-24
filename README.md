@@ -29,7 +29,6 @@ Este é um projeto Django simples para gerenciar tarefas (CRUD e pesquisa).
 4. **Migrar banco de dados**  
    ```bash
    cd todoApp
-   python manage.py makemigrations
    python manage.py migrate
    ```
 
