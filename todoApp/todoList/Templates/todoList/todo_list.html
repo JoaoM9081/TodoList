@@ -24,19 +24,22 @@
   {# Aqui entra o seu for normal #}
   {% for task in tasks %}
   <div class="task-wrapper" data-position="{{ task.pk }}">
-    <div class="task-title">
-      {% if task.complete %}
+  <div class="task-title">
+    {% if task.complete %}
       <div class="task-complete-icon"></div>
-      <i><s><a href="{% url 'task-update' task.id %}">{{ task }}</a></s></i>
-      {% else %}
+      <i><s><span class="task-name">{{ task }}</span></s></i>
+    {% else %}
       <div class="task-incomplete-icon"></div>
-      <a href="{% url 'task-update' task.id %}">{{ task }}</a>
-      {% endif %}
-    </div>
-    <div class="task-controls">
-      <a class="delete-link" href="{% url 'task-delete' task.id %}">&#215;</a>
-    </div>
+      <span class="task-name">{{ task }}</span>
+    {% endif %}
   </div>
+
+  <div class="task-controls">
+    <a class="view-link"   href="{% url 'task-update' task.id %}">&#128065;</a>
+    <a class="delete-link" href="{% url 'task-delete' task.id %}">&#215;</a>
+  </div>
+</div>
+
   {% endfor %}
 
   {% else %}

@@ -89,12 +89,6 @@ input {
     padding: 20px;
 }
 
-.task-title a {
-    text-decoration: none;
-    color: var(--cor-texto-primario);
-    margin-left: 10px;
-}
-
 .task-complete-icon,
 .task-incomplete-icon {
     height: 20px;
@@ -275,4 +269,31 @@ label {
 .card-body textarea:focus {
     border-color: var(--cor-input-hover-border);
     background-color: var(--cor-input-hover-bg);
+}
+
+.task-title .task-name {
+    margin-left: 10px;                
+    color: var(--cor-texto-primario); 
+    font-weight: 600;                
+    text-decoration: none;     
+    cursor:default;       
+}
+
+
+.task-controls {
+    display: flex;
+    align-items: center;
+}
+
+.view-link {
+    text-decoration: none;
+    font-weight: 900;
+    font-size: 22px;
+    line-height: 0;
+    color: var(--cor-botao-texto);    
+    transition: transform 0.1s ease;
+}
+
+.view-link:hover {
+    transform: translateY(-2px);
 }
