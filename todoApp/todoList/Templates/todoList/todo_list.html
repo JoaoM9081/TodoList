@@ -1,71 +1,59 @@
 {% extends 'todoList/main.html' %}
 {% block content %}
 
-  <!-- adiciona Sortable.js (para drag & drop, se quiser) -->
-  <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+<!-- Cabeçalho com título e botão de criar -->
+<div class="header-bar">
+  <h1>Minha Lista de Tarefas</h1>
+</div>
 
-  <!-- Cabeçalho com título e botão de criar -->
-  <div class="header-bar">
-    <h1>My To Do List</h1>
-    <a id="add-link" href="{% url 'task-create' %}">+</a>
-  </div>
-
-  <!-- Barra de busca -->
-  <div id="search-add-wrapper">
-    <form method="get">
-      <input type="text" name="search-area" placeholder="Buscar tarefas…" value="{{ search_input }}">
-      <input type="submit" class="button" value="Search">
-    </form>
-  </div>
-
-  <!-- Formulário escondido para enviar nova ordem -->
-  <form id="reorderForm" method="post" action="{% url 'task-reorder' %}" style="display: none;">
-    {% csrf_token %}
-    <input type="hidden" id="positionInput" name="position">
+<!-- Barra de busca -->
+<div id="search-add-wrapper">
+  <form method="GET" style="display: flex;">
+    <input type='text' name='search-area' placeholder="Pesquise por sua tarefa" value="{{search_input}}">
+    <input class="button" type="submit" value='Pesquisar'>
   </form>
+  {% if tasks|length > 0 %}
+  <a id="add-link" href="{% url 'task-create' %}">&#x2b;</a>
+  {% endif %}
+</div>
 
-  <!-- Lista de tarefas -->
-  <div class="card-body" id="tasklist">
-    {% for task in tasks %}
-      <div class="task-wrapper {% if task.completed %}selectedTask{% endif %}" data-position="{{ task.id }}">
-        <div class="task-title">
-          {% if task.completed %}
-            <div class="task-complete-icon"></div>
-          {% else %}
-            <div class="task-incomplete-icon"></div>
-          {% endif %}
-          <a href="{% url 'task-update' task.id %}">{{ task.title }}</a>
-        </div>
-        <div class="task-controls">
-          <a class="delete-link" href="{% url 'task-delete' task.id %}">&times;</a>
-          <span class="handle">&nbsp;&#10247;</span>
-        </div>
-      </div>
-    {% empty %}
-      <div style="text-align: center; padding: 20px;">
-        <h3>Nenhuma tarefa disponível.</h3>
-        <a class="button" href="{% url 'task-create' %}">Criar nova tarefa</a>
-      </div>
-    {% endfor %}
+<!-- Lista de tarefas -->
+<div id="tasklist" class="task-items-wrapper">
+
+  {% if tasks %}
+  {# Aqui entra o seu for normal #}
+  {% for task in tasks %}
+  <div class="task-wrapper" data-position="{{ task.pk }}">
+    <div class="task-title">
+      {% if task.complete %}
+      <div class="task-complete-icon"></div>
+      <i><s><a href="{% url 'task-update' task.id %}">{{ task }}</a></s></i>
+      {% else %}
+      <div class="task-incomplete-icon"></div>
+      <a href="{% url 'task-update' task.id %}">{{ task }}</a>
+      {% endif %}
+    </div>
+    <div class="task-controls">
+      <a class="delete-link" href="{% url 'task-delete' task.id %}">&#215;</a>
+    </div>
   </div>
+  {% endfor %}
 
-  <script>
-    const taskList = document.getElementById("tasklist");
-    const reorderForm = document.getElementById("reorderForm");
-    const positionInput = document.getElementById("positionInput");
+  {% else %}
+  {# Não veio nenhuma tarefa #}
+  {% if search_input %}
+  <div style="text-align: center; padding: 20px;">
+    <h3>Não foi encontrada nenhuma tarefa para “{{ search_input }}”</h3>
+    <h4><a href="{% url 'tasks' %}">Voltar à lista completa</a></h4>
+  </div>
+  {% else %}
+  <div style="text-align: center; padding: 20px; line-height: 1em;">
+    <h3>Não há tarefas criadas</h3>
+    <h3>Crie uma <a style="text-decoration: none; color: #e53935;" href="{% url 'task-create' %}">Nova Tarefa</a>!</h3>
+  </div>
+  {% endif %}
+  {% endif %}
 
-    Sortable.create(taskList, {
-      handle: '.handle',
-      ghostClass: 'dropArea',
-      chosenClass: 'selectedTask',
-      onEnd: () => {
-        const positions = Array.from(taskList.children)
-                               .map(el => el.dataset.position)
-                               .join(',');
-        positionInput.value = positions;
-        reorderForm.submit();
-      }
-    });
-  </script>
+</div>
 
 {% endblock content %}

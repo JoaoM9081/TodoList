@@ -1,13 +1,9 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from .models import Todo
-from django.views import View
-from django.shortcuts import redirect
-from django.db import transaction
-from .forms import PositionForm
 
 # Create your views here.
 class TaskList(ListView):
@@ -23,7 +19,6 @@ class TaskList(ListView):
 
         context['search_input'] = search_input
         return context
-
 
 class TaskDetail(DetailView):
     model = Todo
@@ -47,15 +42,3 @@ class DeleteView(DeleteView):
     context_object_name = 'task'
     template_name = 'todoList/delete.html'
     success_url = reverse_lazy('tasks')
-    
-class TaskReorder(View):
-    def post(self, request):
-        form = PositionForm(request.POST)
-
-        if form.is_valid():
-            positionList = form.cleaned_data["position"].split(',')
-
-            with transaction.atomic():
-                request.user.set_task_order(positionList)
-
-        return redirect(reverse_lazy('tasks'))
